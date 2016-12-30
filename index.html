@@ -15,6 +15,7 @@
   <script type="text/javascript">
     function draw(data) {
         "use strict";
+
         var margin = 50,
             width = 500 - margin,
             height = 500 - margin;
@@ -28,16 +29,57 @@
             .attr("width", width + margin)
             .attr("height", height + margin);
 
-        var scale_x = d3.scale_x
 
+        // create scales
+        var xscale = d3.scale.linear()
+          .range([margin, width]) // (inverse) scale from height (bottom) to upper marginn
+          .domain(d3.extent(data, function(d) {
+            return d['maxLCL']
+          }));
+        var yscale = d3.scale.log()
+          .range([height, margin]) // (inverse) scale from height (bottom) to upper marginn
+          .domain(d3.extent(data, function(d) {
+            return d['Biovolume']
+          }));
+
+          // create axes
+          var xaxis = d3.svg.axis()
+            .scale(xscale)
+            .tickValues([1,2,3,4,5]);
+
+          var yaxis = d3.svg.axis()
+            .scale(yscale)
+            .orient("left");
+
+          // add axes to the svg element
+          d3.select("svg")
+            .append('g')
+            .attr('class', 'x axis')
+            .attr('transform', "translate(0," + height + ")")
+            .call(xaxis);
+
+          d3.select("svg")
+            .append('g')
+            .attr('class', 'y axis')
+            .attr('transform', "translate(" + margin + ",0)")
+            .call(yaxis);
+
+
+
+        // plot points
         svg.selectAll("circle")
             .data(data)
             .enter()
             .append("circle")
-            .attr('cx', 25)
-            .attr('cy', 25)
-            .attr('r', 10)
-            .attr('fill', 'blue');
+            .attr('cx', function(d) {
+              return xscale(d['maxLCL']);
+            })
+            .attr('cy', function(d) {
+              return yscale(d['Biovolume']);
+            })
+            .attr('r', 2)
+            .attr('fill', 'blue')
+            .attr('opacity', 0.1);
 
         } //end of draw function
 
@@ -49,7 +91,11 @@
     Use D3 to load the GeoJSON file
     */
 
-  d3.csv("data.csv", draw);
+  d3.csv("data.csv", function(d) { //d refers to row in csv file
+    d['maxLCL'] = +d['maxLCL']; // 'unary' operator converts strings to integer; Javscript trick
+    d['Biovolume'] = +d['Biovolume'];
+    return d;
+  }, draw);
   </script>
 </body>
 </html>
