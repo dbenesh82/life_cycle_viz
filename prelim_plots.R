@@ -85,7 +85,7 @@ humans <- filter(dataH, Host.species == "Homo sapiens")%>%select(Parasite.specie
   mutate(human = "yes")
 dataL.sp <- left_join(dataL.sp, humans)
 dataL.sp$human[is.na(dataL.sp$human)] <- "no"
-rm(maxLCL, minLCL, prop, host.fac)
+rm(maxLCL, minLCL, prop, host.fac, humans)
 
 
 #rearrange columns for clarity
@@ -96,17 +96,6 @@ dataL.sp <- select(dataL.sp, Parasite.species, Parasite.group, minLCL, maxLCL, m
 
 #create host.no factor variable for x-axis in plots
 dataL.sp$Host.nofac <- factor(dataL.sp$Host.no, labels = c("propagule", "1st", "2nd", "3rd", "4th", "5th"))
-
-
-#set theme for plots
-theme.o <- theme_update(axis.text = element_text(colour="black", size = 14),
-                        axis.title = element_text(colour="black", size = 15, lineheight=0.25),
-                        axis.ticks = element_line(colour="black"),
-                        panel.border = element_rect(colour = "black",fill=NA),
-                        panel.grid.minor=element_blank(),
-                        panel.grid.major=element_line(color="gray",linetype = "dotted"),
-                        panel.background= element_rect(fill = NA))
-
 
 
 
@@ -136,6 +125,30 @@ for(i in seq_along(dataL.sp$Def.int)){
 dataL.sp <- select(dataL.sp, -human)
 
 
+#create variable if size measurements over cycle are complete
+dataL.sp$complete_size <- "incomplete"
+for(species in unique(dataL.sp$Parasite.species)){
+  bv <- dataL.sp$Biovolume[which(dataL.sp$Parasite.species == species)]
+  if(sum(is.na(bv)) == 0) {
+    dataL.sp$complete_size[which(dataL.sp$Parasite.species == species)] <- "complete"
+  }
+}
+
+
+
+
+
+
+#set theme for plots
+theme.o <- theme_update(axis.text = element_text(colour="black", size = 14),
+                        axis.title = element_text(colour="black", size = 15, lineheight=0.25),
+                        axis.ticks = element_line(colour="black"),
+                        panel.border = element_rect(colour = "black",fill=NA),
+                        panel.grid.minor=element_blank(),
+                        panel.grid.major=element_line(color="gray",linetype = "dotted"),
+                        panel.background= element_rect(fill = NA))
+
+
 
 #plot parasite size over the life cycle
 ggplot(data=dataL.sp,
@@ -149,7 +162,7 @@ ggplot(data=dataL.sp,
 
 
 #highlight intermediate hosts
-ggplot(data=dataL.sp,
+ggplot(data=arrange(dataL.sp, trans.to.int),
        aes(x=Host.nofac, y=log10(Biovolume), 
            group=Parasite.species, color=as.factor(maxLCL))) +
   geom_line(aes(alpha = trans.to.int)) + 
@@ -166,7 +179,7 @@ ggplot(data=dataL.sp,
 
 
 #highlight definitive hosts
-ggplot(data=dataL.sp,
+ggplot(data=arrange(dataL.sp, trans.to.def),
        aes(x=Host.nofac, y=log10(Biovolume), 
            group=Parasite.species, color=as.factor(maxLCL))) +
   geom_line(aes(alpha = trans.to.def)) + 
@@ -182,8 +195,8 @@ ggplot(data=dataL.sp,
 
 
 
-#highlight intermediate hosts
-ggplot(data=dataL.sp,
+#highlight facultative hosts
+ggplot(data=arrange(dataL.sp, trans.to.fac),
        aes(x=Host.nofac, y=log10(Biovolume), 
            group=Parasite.species, color=as.factor(maxLCL))) +
   geom_line(aes(alpha = trans.to.fac)) + 
@@ -201,7 +214,7 @@ ggplot(data=dataL.sp,
 
 
 #highlight humans
-ggplot(data=dataL.sp,
+ggplot(data=arrange(dataL.sp, trans.to.human),
        aes(x=Host.nofac, y=log10(Biovolume), 
            group=Parasite.species, color=as.factor(maxLCL))) +
   geom_line(aes(alpha = trans.to.human)) + 
@@ -213,10 +226,4 @@ ggplot(data=dataL.sp,
   scale_x_discrete(expand=c(0.05,0.05)) +
   annotate("text", x = 4.5, y = -4.5, label = "Transmission to humans", 
            size = 6, color = "darkgray")
-
-
-
-
-
-#
 
