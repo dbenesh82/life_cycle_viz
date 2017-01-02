@@ -16,27 +16,27 @@
     function draw(data) {
         "use strict";
 
-        var margin = 50,
-            width = 500 - margin,
-            height = 500 - margin;
+        var margin = {top: 50, right: 30, bottom: 50, left: 70},
+            width = 500,
+            height = 500;
 
         d3.select("body") // add a title
           .append('h2')
-          .text("Test");
+          .text("Parasite life cycles");
 
         var svg = d3.select("body")
             .append("svg")
-            .attr("width", width + margin)
-            .attr("height", height + margin);
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
 
 
         // create scales
         var xscale = d3.scalePoint()
           .domain(["propagule", "1st", "2nd", "3rd", "4th", "5th"])
-          .range([margin, width]) // scale from margin to width
+          .range([margin.left, width]) // scale from margin to width
           .padding(0.2)
         var yscale = d3.scaleLog()
-          .range([height, margin]) // (inverse) scale from height (bottom) to upper marginn
+          .range([height, margin.bottom]) // (inverse) scale from height (bottom) to upper marginn
           .domain(d3.extent(data, function(d) {
             return d['Biovolume']
           }));
@@ -54,17 +54,17 @@
         svg.append("text") // add title
           .attr('class', 'x title')
           .attr("text-anchor", "middle")
-          .attr("transform", "translate("+ (width/2) + "," + (height + (margin/1.5)) +")")  // centre below axis
+          .attr("transform", "translate("+ (width/2) + "," + (height + (margin.bottom/1.5)) +")")  // centre below axis
           .text('Host in cycle');
 
         svg.append('g')
           .attr('class', 'y axis')
-          .attr('transform', "translate(" + margin + ",0)")
+          .attr('transform', "translate(" + margin.left + ",0)")
           .call(yaxis);
         svg.append('text') // add title
           .attr('class', 'y title')
           .attr("text-anchor", "middle")
-          .attr("transform", "translate("+ (margin/4) +","+(height/2)+")rotate(-90)")
+          .attr("transform", "translate("+ (margin.left/3) +"," + (height/2) + ") rotate(-90)")
           .text('Biovolume');
 
 
@@ -95,7 +95,7 @@
         var drawLine = d3.line()
           .x(function(d) {return xscale(d['Host.nofac'])})
           .y(function(d) {return yscale(d['Biovolume'])});
-        debugger;
+
         // add line to chart
         psdata.forEach(function(d) {
           svg.append('path')
