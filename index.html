@@ -40,6 +40,7 @@
           .domain(d3.extent(data, function(d) {
             return d['Biovolume']
           }));
+        var colscale = d3.scaleOrdinal(d3.schemeCategory10);
 
         // define axes
         var xaxis = d3.axisBottom(xscale);
@@ -80,8 +81,10 @@
             return yscale(d['Biovolume']); // need to filter out NaN values
           })
           .attr('r', 3)
-          .attr('fill', 'blue')
-          .attr('opacity', 0.1);
+          .attr('fill', function(d) {
+            return colscale(d['maxLCL']);
+          })
+          .attr('opacity', 0.05);
 
         // group data by parasite species
         var psdata = d3.nest()
@@ -92,12 +95,13 @@
         var drawLine = d3.line()
           .x(function(d) {return xscale(d['Host.nofac'])})
           .y(function(d) {return yscale(d['Biovolume'])});
-
+        debugger;
         // add line to chart
         psdata.forEach(function(d) {
           svg.append('path')
+            .attr("class", "species lines")
             .attr("d", drawLine(d.values))
-            .attr("stroke", "gray")
+            .attr("stroke", colscale(d.values[0]['maxLCL']))
             .attr("stroke-width", 1)
             .attr("stroke-opacity", 0.1)
             .attr("fill", "none");
