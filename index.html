@@ -83,18 +83,25 @@
           .attr('fill', 'blue')
           .attr('opacity', 0.1);
 
+        // group data by parasite species
+        var psdata = d3.nest()
+          .key(function(d) {return d['Parasite.species']})
+          .entries(data)
+
         // create function for connecting data points
         var drawLine = d3.line()
           .x(function(d) {return xscale(d['Host.nofac'])})
           .y(function(d) {return yscale(d['Biovolume'])});
 
         // add line to chart
-        svg.append('path')
-          .attr("d", drawLine(data))
-          .attr("stroke", "gray")
-          .attr("stroke-width", 1)
-          .attr("stroke-opacity", 0.1)
-          .attr("fill", "none");
+        psdata.forEach(function(d) {
+          svg.append('path')
+            .attr("d", drawLine(d.values))
+            .attr("stroke", "gray")
+            .attr("stroke-width", 1)
+            .attr("stroke-opacity", 0.1)
+            .attr("fill", "none");
+        });
 
 
         } //end of draw function
@@ -104,13 +111,13 @@
 
   <script type="text/javascript">
   /*
-    Use D3 to load the GeoJSON file
+    Use D3 to load the data
     */
 
   d3.csv("data.csv", function(d) { //d refers to row in csv file
-    d['maxLCL'] = +d['maxLCL']; // 'unary' operator converts strings to integer; Javscript trick
+    d['maxLCL'] = +d['maxLCL']; // 'unary' operator converts strings to number; Javscript trick
     d['Biovolume'] = +d['Biovolume'];
-    if(!isNaN(d['Biovolume'])) {return d};
+    if(!isNaN(d['Biovolume'])) {return d}; // remove all rows where biovolume couldn't be coerced to a number
   }, draw);
   </script>
 </body>
