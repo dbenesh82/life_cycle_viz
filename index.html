@@ -5,17 +5,25 @@
   <script type="text/javascript" src="d3/d3.js"></script>
   <style>
     h2 {
-      color: 'red';
-      }
+      color: black;
+    }
     .grid line {
       stroke: lightgrey;
       stroke-dasharray: 3;
       stroke-opacity: 0.5;
       shape-rendering: crispEdges;
-      }
+    }
     .grid path {
       stroke-width: 0;
-      }
+    }
+    div.buttons {
+      position: fixed;
+      top: 50px;
+      left: 50px;
+      background-color: gray;
+      padding: 3px;
+      margin: 7px;
+    }
   </style>
   </head>
 
@@ -31,9 +39,15 @@
             canvaswidth = chartwidth + margin.right + margin.left,
             canvasheight = chartheight + margin.top + margin.bottom;
 
+        var buttons = d3.select("body")
+          .append("div")
+          .attr('class', 'buttons')
+          .text('Press Me')
+
         d3.select("body") // add a title
           .append('h2')
           .text("Parasite life cycles");
+
 
         var svg = d3.select("body")
             .append("svg")
@@ -75,7 +89,7 @@
             .attr("class", "grid")
             .attr('transform', "translate(" + margin.left + ",0)")
             .call(yaxis.ticks(5)
-                .tickSize(-chartwidth)
+                .tickSize(-chartwidth + margin.right)
                 .tickFormat("")
             )
         svg.append('text') // add title
@@ -113,7 +127,7 @@
           .x(function(d) {return xscale(d['Host.nofac'])})
           .y(function(d) {return yscale(d['Biovolume'])});
 
-        // add line to chart
+        // add lines to chart
         psdata.forEach(function(d) {
           svg.append('path')
             .attr("class", "species lines")
@@ -123,6 +137,23 @@
             .attr("stroke-opacity", 0.1)
             .attr("fill", "none");
         });
+
+
+
+        // update color scheme based on click of button
+        d3.select(".buttons")
+          .on('click', function() {
+            //update color scheme for circles and paths
+            svg.selectAll("circle")
+              .attr('fill', function(d) {
+                return colscale(d['minLCL']);
+              });
+            svg.selectAll('.species.lines')
+              .attr("stroke", function(d) {
+                return colscale(d['minLCL']);
+              });
+
+          })
 
 
         } //end of draw function
