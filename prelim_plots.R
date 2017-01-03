@@ -30,9 +30,11 @@ rm(sv)
 
 
 #remove troublesome values
-dataL.sp <- filter(dataL, is.na(Asexual))%>% #remove data for asexual species
+asexs <- filter(dataH, Asexual != 'none')%>%select(Parasite.species)%>%distinct()
+dataL.sp <- filter(dataL, !Parasite.species %in% asexs$Parasite.species)%>% #remove data for asexual species
   mutate(stsex = paste(Stage, Sex))%>%
   filter(stsex != "adult m")%>%select(-stsex) #remove adult males before averaging
+rm(asexs)
 
 
 
@@ -131,6 +133,9 @@ for(species in unique(dataL.sp$Parasite.species)){
   bv <- dataL.sp$Biovolume[which(dataL.sp$Parasite.species == species)]
   if(sum(is.na(bv)) == 0) {
     dataL.sp$complete_size[which(dataL.sp$Parasite.species == species)] <- "complete"
+  } else if(sum(is.na(bv))-1 == 
+            unique(dataL.sp$maxLCL[which(dataL.sp$Parasite.species == species)])) {
+    dataL.sp$complete_size[which(dataL.sp$Parasite.species == species)] <- "all missing"
   }
 }
 

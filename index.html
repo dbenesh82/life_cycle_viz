@@ -55,7 +55,7 @@
 
         // create buttons for interactivity
         var buttons = button_container.selectAll("div")
-          .data(["Random species", "1-host cycles", "2-host cycles", "3-host cycles", "4+ host cycles",
+          .data(["Random species", "One host cycles", "Two host cycles", "Three host cycles", "Four plus host cycles",
                 "To intermediate host", "To definitive host", "To facultative host", "To humans"])
           .enter()
           .append('div')
@@ -126,6 +126,10 @@
           .data(data)
           .enter()
           .append("circle")
+          .attr("class", "species points")
+          .attr("id", function(d) {
+            return d['Parasite.species'].split(' ').join('_');
+          })
           .attr('cx', function(d) {
             return xscale(d['Host.nofac']);
           })
@@ -156,15 +160,15 @@
               hostn2 = data[i + 1]["Host.no"];
           if( (sp1 == sp2) && ((hostn2 - hostn1) == 1)) { // create new data object
             var link_row = {
-              Species: sp1.split(' ').join('_'),
+              Species: sp1,
               Host1: data[i]['Host.nofac'],
               Host2: data[i + 1]['Host.nofac'],
               Biov1: size1,
               Biov2: size2,
-              maxLCL: data[i]['maxLCL']
-              to_int: data[i]['trans.to.int']
-              to_def: data[i]['trans.to.def']
-              to_fac: data[i]['trans.to.fac']
+              maxLCL: data[i]['maxLCL'],
+              to_int: data[i]['trans.to.int'],
+              to_def: data[i]['trans.to.def'],
+              to_fac: data[i]['trans.to.fac'],
               to_hum: data[i]['trans.to.human']
             };
           links.push(link_row); // add link data to a data array
@@ -177,7 +181,7 @@
           .enter()
           .append('line')
           .attr("class", "species lines")
-          .attr("id", function(d) {return d.Species})
+          .attr("id", function(d) {return d.Species.split(' ').join('_')})
           .attr("x1", function(d) {return xscale(d.Host1)})
           .attr("x2", function(d) {return xscale(d.Host2)})
           .attr("y1", function(d) {return yscale(d.Biov1)})
@@ -192,48 +196,110 @@
 
 
 
+        
 
+        // update color scheme for a random species
+        var species = d3.set(); // make set of species
+        data.forEach( function(d) {
+          species.add(d['Parasite.species']);
+        });
+        var randsp = species.values()[
+          Math.random() * species.values().length | 0
+        ]
 
-        // update color scheme based on click of button
-        d3.select(".buttons")
+        d3.select("div#Random_species")
           .on('click', function() {
             // update color scheme for points
             svg.selectAll("circle")
               .transition()
               .duration(1500)
               .attr('fill', function(d) {
-                if(d['Parasite.species'] == "Schistocephalus solidus") {
+                if(d['Parasite.species'] == randsp) {
                   return 'red';
                 } else {
                   return 'gray'
                 }
-                //return colscale(d['minLCL']);
               })
               .attr('opacity', function(d) {
-                if(d['Parasite.species'] == "Schistocephalus solidus") {
+                if(d['Parasite.species'] == randsp) {
                   return 1;
                 }
               })
               .attr('r', function(d) {
-                if(d['Parasite.species'] == "Schistocephalus solidus") {
-                  return 10;
+                if(d['Parasite.species'] == randsp) {
+                  return 5;
                 }
-              })
+              });
+
             // update color scheme for lines
-            svg.selectAll('.species.lines')
+            svg.selectAll("line.species.lines")
               .transition()
               .duration(1500)
               .attr("stroke", function(d) {
-                if(d.key == "Schistocephalus solidus") {
+                if(d['Species'] == randsp) {
                   return 'red';
                 } else {
                   return 'gray'
                 }
-                //return colscale(d.values[0]['minLCL']);
+              })
+              .attr("stroke-opacity", function(d) {
+                if(d['Species'] == randsp) {
+                  return 1;
+                } else {
+                  return 0.05;
+                }
               });
 
           })
 
+
+
+
+          d3.select("div#One_host_cycles")
+            .on('click', function() {
+              // update color scheme for points
+              svg.selectAll("circle")
+                .transition()
+                .duration(1500)
+                .attr('fill', function(d) {
+                  if(d['maxLCL'] == 1) {
+                    return 'red';
+                  } else {
+                    return 'gray'
+                  }
+                })
+                .attr('opacity', function(d) {
+                  if(d['maxLCL'] == 1) {
+                    return 1;
+                  }
+                })
+                .attr('r', function(d) {
+                  if(d['maxLCL'] == 1) {
+                    return 5;
+                  }
+                });
+
+
+              // update color scheme for lines
+              svg.selectAll("line.species.lines")
+                .transition()
+                .duration(1500)
+                .attr("stroke", function(d) {
+                  if(d['maxLCL'] == 1) {
+                    return 'red';
+                  } else {
+                    return 'gray'
+                  }
+                })
+                .attr("stroke-opacity", function(d) {
+                  if(d['maxLCL'] == 1) {
+                    return 1;
+                  } else {
+                    return 0.05;
+                  }
+                });
+
+            })
 
         } //end of draw function
 
@@ -250,7 +316,8 @@
     d['Host.no'] = +d['Host.no'];
     d['Biovolume'] = +d['Biovolume'];
     if(!isNaN(d['Biovolume'])) {return d}; // remove all rows where biovolume couldn't be coerced to a number
-  }, draw);
+  },
+  draw);
   </script>
 </body>
 </html>
