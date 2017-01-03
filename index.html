@@ -16,7 +16,7 @@
     .grid path {
       stroke-width: 0;
     }
-    div.buttons {
+    button.buttons {
       text-align: center;
       font-size: small;
       background-color: lightgray;
@@ -51,14 +51,14 @@
         var button_container = d3.select("body")
           .append("div")
           .attr('class', 'button_container')
-          .attr('width', canvaswidth)
+          .style('width', canvaswidth + "px")
 
         // create buttons for interactivity
-        var buttons = button_container.selectAll("div")
+        var buttons = button_container.selectAll("button")
           .data(["Random species", "One host cycles", "Two host cycles", "Three host cycles", "Four plus host cycles",
                 "To intermediate host", "To definitive host", "To facultative host", "To humans", "RESET"])
           .enter()
-          .append('div')
+          .append('button')
           .attr('class', 'buttons')
           .attr('id', function(d) {
             return d.split(' ').join('_');
@@ -195,7 +195,8 @@
 
 
 
-        var update = function(data_var_points, data_grp_points, data_var_lines, data_grp_lines) {
+        var update = function(data_var_points, data_grp_points, data_var_lines, data_grp_lines,
+        grp_color, grp_opacity, grp_r) {
           /*
           function takes into conditions for highlighting points and lines
           cond_points and cond_lines should return true/false
@@ -207,19 +208,23 @@
             .duration(1500)
             .attr('fill', function(d) {
               if(d[data_var_points] == data_grp_points) {
-                return 'red';
+                return grp_color;
               } else {
-                return 'gray'
+                return 'gray';
               }
             })
             .attr('opacity', function(d) {
               if(d[data_var_points] == data_grp_points) {
-                return 1;
+                return grp_opacity;
+              } else {
+                return 0.05;
               }
             })
             .attr('r', function(d) {
               if(d[data_var_points] == data_grp_points) {
-                return 5;
+                return grp_r;
+              } else {
+                return 3
               }
             });
 
@@ -229,14 +234,14 @@
             .duration(1500)
             .attr("stroke", function(d) {
               if(d[data_var_lines] == data_grp_lines) {
-                return 'red';
+                return grp_color;
               } else {
                 return 'gray'
               }
             })
             .attr("stroke-opacity", function(d) {
               if(d[data_var_lines] == data_grp_lines) {
-                return 1;
+                return grp_opacity;
               } else {
                 return 0.05;
               }
@@ -244,24 +249,25 @@
           }
 
 
-        d3.select("div#One_host_cycles")
+        // make buttons functional
+        d3.select("button#One_host_cycles")
             .on('click', function() {
-              update('maxLCL', 1, 'maxLCL', 1)
+              update('maxLCL', 1, 'maxLCL', 1, colscale(1), 1, 5)
             })
 
-        d3.select("div#Two_host_cycles")
+        d3.select("button#Two_host_cycles")
           .on('click', function() {
-            update('maxLCL', 2, 'maxLCL', 2)
+            update('maxLCL', 2, 'maxLCL', 2, colscale(2), 1, 5)
           })
 
-        d3.select("div#Three_host_cycles")
+        d3.select("button#Three_host_cycles")
           .on('click', function() {
-            update('maxLCL', 3, 'maxLCL', 3)
+            update('maxLCL', 3, 'maxLCL', 3, colscale(3), 1, 5)
           })
 
-        d3.select("div#Four_plus_host_cycles") // needs work!
+        d3.select("button#Four_plus_host_cycles") // needs work!
           .on('click', function() {
-            update('maxLCL', 4, 'maxLCL', 4)
+            update('maxLCL', 4, 'maxLCL', 4, colscale(4), 1, 5)
           })
 
 
@@ -274,32 +280,32 @@
           Math.random() * species.values().length | 0
         ]
 
-        d3.select("div#Random_species")
+        d3.select("button#Random_species")
           .on('click', function() {
-            update('Parasite.species', randsp, 'Species', randsp)
+            update('Parasite.species', randsp, 'Species', randsp, 'red', 1, 5)
           }) // needs to be able to repeat!
 
 
 
-        d3.select("div#To_intermediate_host")
+        d3.select("button#To_intermediate_host")
           .on('click', function() {
-            update('trans_to_int', 'yes', 'to_int', 'yes')
+            update('Def.int', 'int', 'to_int', 'yes', colscale(5), 0.5, 5)
           })
-        d3.select("div#To_definitive_host")
+        d3.select("button#To_definitive_host")
           .on('click', function() {
-            update('trans_to_def', 'yes', 'to_def', 'yes')
+            update('Def.int', 'def', 'to_def', 'yes', colscale(7), 0.5, 5)
           })
-        d3.select("div#To_facultative_host")
+        d3.select("button#To_facultative_host", colscale(8), 1, 5)
           .on('click', function() {
-            update('trans_to_fac', 'yes', 'to_fac', 'yes')
+            update('trans_to_fac', 'yes', 'to_fac', 'yes', colscale(9), 1, 5)
           })
-        d3.select("div#To_humans")
+        d3.select("button#To_humans")
           .on('click', function() {
-            update('trans_to_human', 'yes', 'to_hum', 'yes')
+            update('trans_to_human', 'yes', 'to_hum', 'yes', colscale(10), 1, 5)
           })
 
 
-        d3.select("div#RESET")
+        d3.select("button#RESET")
           .on('click', function() {
             plot_geoms()
           })
