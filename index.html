@@ -120,76 +120,76 @@
           .text('Biovolume');
 
 
-
-        // plot points
-        svg.selectAll("circle")
-          .data(data)
-          .enter()
-          .append("circle")
-          .attr("class", "species points")
-          .attr("id", function(d) {
-            return d['Parasite.species'].split(' ').join('_');
-          })
-          .attr('cx', function(d) {
-            return xscale(d['Host.nofac']);
-          })
-          .attr('cy', function(d) {
-            return yscale(d['Biovolume']); // need to filter out NaN values
-          })
-          .attr('r', 3)
-          .attr('fill', function(d) {
-            return colscale(d['maxLCL']);
-          })
-          .attr('opacity', 0.05);
-
-
-
-
-        /* first made paths for each species
-        but to interactively highlight each connection (also within species)
-        need to have each line independent (i.e. not a path). This loop
-        restructures data as links between points, so as to make the lines
-        */
-        var links = []
-        for(var i = 0; i < (data.length - 1); i += 1) {
-          var sp1 = data[i]["Parasite.species"], // create variables for making new data
-              sp2 = data[i + 1]["Parasite.species"],
-              size1 = data[i]["Biovolume"],
-              size2 = data[i + 1]["Biovolume"],
-              hostn1 = data[i]["Host.no"],
-              hostn2 = data[i + 1]["Host.no"];
-          if( (sp1 == sp2) && ((hostn2 - hostn1) == 1)) { // create new data object
-            var link_row = {
-              Species: sp1,
-              Host1: data[i]['Host.nofac'],
-              Host2: data[i + 1]['Host.nofac'],
-              Biov1: size1,
-              Biov2: size2,
-              maxLCL: data[i]['maxLCL'],
-              to_int: data[i]['trans_to_int'],
-              to_def: data[i]['trans_to_def'],
-              to_fac: data[i]['trans_to_fac'],
-              to_hum: data[i]['trans_to_human']
+          /* first made paths for each species
+          but to interactively highlight each connection (also within species)
+          need to have each line independent (i.e. not a path). This loop
+          restructures data as links between points, so as to make the lines
+          */
+          var links = []
+          for(var i = 0; i < (data.length - 1); i += 1) {
+            var sp1 = data[i]["Parasite.species"], // create variables for making new data
+                sp2 = data[i + 1]["Parasite.species"],
+                size1 = data[i]["Biovolume"],
+                size2 = data[i + 1]["Biovolume"],
+                hostn1 = data[i]["Host.no"],
+                hostn2 = data[i + 1]["Host.no"];
+            if( (sp1 == sp2) && ((hostn2 - hostn1) == 1)) { // create new data object
+              var link_row = {
+                Species: sp1,
+                Host1: data[i]['Host.nofac'],
+                Host2: data[i + 1]['Host.nofac'],
+                Biov1: size1,
+                Biov2: size2,
+                maxLCL: data[i]['maxLCL'],
+                to_int: data[i]['trans_to_int'],
+                to_def: data[i]['trans_to_def'],
+                to_fac: data[i]['trans_to_fac'],
+                to_hum: data[i]['trans_to_human']
+              };
+            links.push(link_row); // add link data to a data array
             };
-          links.push(link_row); // add link data to a data array
           };
-        };
 
-        // add line segments connecting points for each species
-        svg.selectAll('line')
-          .data(links)
-          .enter()
-          .append('line')
-          .attr("class", "species lines")
-          .attr("id", function(d) {return d.Species.split(' ').join('_')})
-          .attr("x1", function(d) {return xscale(d.Host1)})
-          .attr("x2", function(d) {return xscale(d.Host2)})
-          .attr("y1", function(d) {return yscale(d.Biov1)})
-          .attr("y2", function(d) {return yscale(d.Biov2)})
-          .attr("stroke", function(d) {return colscale(d.maxLCL)})
-          .attr("stroke-width", 1)
-          .attr("stroke-opacity", 0.1)
-          .attr("fill", "none");
+
+        var plot_geoms = function() {
+          // plot points
+          svg.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("class", "species points")
+            .attr("id", function(d) {
+              return d['Parasite.species'].split(' ').join('_');
+            })
+            .attr('cx', function(d) {
+              return xscale(d['Host.nofac']);
+            })
+            .attr('cy', function(d) {
+              return yscale(d['Biovolume']); // need to filter out NaN values
+            })
+            .attr('r', 3)
+            .attr('fill', function(d) {
+              return colscale(d['maxLCL']);
+            })
+            .attr('opacity', 0.05);
+
+          // add line segments connecting points for each species
+          svg.selectAll('line')
+            .data(links)
+            .enter()
+            .append('line')
+            .attr("class", "species lines")
+            .attr("id", function(d) {return d.Species.split(' ').join('_')})
+            .attr("x1", function(d) {return xscale(d.Host1)})
+            .attr("x2", function(d) {return xscale(d.Host2)})
+            .attr("y1", function(d) {return yscale(d.Biov1)})
+            .attr("y2", function(d) {return yscale(d.Biov2)})
+            .attr("stroke", function(d) {return colscale(d.maxLCL)})
+            .attr("stroke-width", 1)
+            .attr("stroke-opacity", 0.1)
+            .attr("fill", "none");
+          }
+          plot_geoms()
 
 
 
@@ -301,7 +301,7 @@
 
         d3.select("div#RESET")
           .on('click', function() {
-            draw(data)
+            plot_geoms()
           })
 
 
