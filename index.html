@@ -127,10 +127,10 @@
           .x(function(d) {return xscale(d['Host.nofac'])})
           .y(function(d) {return yscale(d['Biovolume'])});
 
-        // add lines to chart
         psdata.forEach(function(d) {
           svg.append('path')
             .attr("class", "species lines")
+            .attr("id", d.key)
             .attr("d", drawLine(d.values))
             .attr("stroke", colscale(d.values[0]['maxLCL']))
             .attr("stroke-width", 1)
@@ -143,15 +143,32 @@
         // update color scheme based on click of button
         d3.select(".buttons")
           .on('click', function() {
-            //update color scheme for circles and paths
+            // update color scheme for points
             svg.selectAll("circle")
-              .attr('fill', function(d) {
-                return colscale(d['minLCL']);
-              });
+              .transition()
+              .duration(1500)
+              .attr('fill', 'gray');
+              //function(d) {
+              //  return colscale(d['minLCL']);
+              //});
+            // remove existing species lines
             svg.selectAll('.species.lines')
-              .attr("stroke", function(d) {
-                return colscale(d['minLCL']);
-              });
+              .transition()
+              .duration(1500)
+              .attr("stroke", 'gray')
+
+            // add new lines with new color scheme; probably a way to do this without for loop, which would make updating easier
+            //psdata.forEach(function(d) {
+            //  svg.append('path')
+            //    .transition()
+            //    .ease('linear')
+            //    .attr("class", "species lines")
+            //    .attr("d", drawLine(d.values))
+            //    .attr("stroke", colscale(d.values[0]['minLCL']))
+            //    .attr("stroke-width", 1)
+            //    .attr("stroke-opacity", 0.1)
+            //    .attr("fill", "none");
+            //});
 
           })
 
