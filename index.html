@@ -60,6 +60,9 @@
           .enter()
           .append('div')
           .attr('class', 'buttons')
+          .attr('id', function(d) {
+            return d.split(' ').join('_');
+          })
           .text(function(d) {return d;})
           .style('width', chartwidth / 5 + "px")
           .style('float', 'left')
@@ -135,29 +138,57 @@
           })
           .attr('opacity', 0.05);
 
-        // group data by parasite species
-        var psdata = d3.nest()
-          .key(function(d) {return d['Parasite.species']})
-          .entries(data)
 
-        // create function for connecting data points
-        var drawLine = d3.line()
-          .x(function(d) {return xscale(d['Host.nofac'])})
-          .y(function(d) {return yscale(d['Biovolume'])});
 
-        // add lines for each species
-        svg.selectAll('path')
-          .data(psdata)
+
+        /* first made paths for each species
+        but to interactively highlight each connection (also within species)
+        need to have each line independent (i.e. not a path). This loop
+        restructures data as links between points, so as to make the lines
+        */
+        var links = []
+        for(var i = 0; i < (data.length - 1); i += 1) {
+          var sp1 = data[i]["Parasite.species"], // create variables for making new data
+              sp2 = data[i + 1]["Parasite.species"],
+              size1 = data[i]["Biovolume"],
+              size2 = data[i + 1]["Biovolume"],
+              hostn1 = data[i]["Host.no"],
+              hostn2 = data[i + 1]["Host.no"];
+          if( (sp1 == sp2) && ((hostn2 - hostn1) == 1)) { // create new data object
+            var link_row = {
+              Species: sp1.split(' ').join('_'),
+              Host1: data[i]['Host.nofac'],
+              Host2: data[i + 1]['Host.nofac'],
+              Biov1: size1,
+              Biov2: size2,
+              maxLCL: data[i]['maxLCL']
+            };
+          links.push(link_row); // add link data to a data array
+          };
+        };
+        debugger;
+
+        // add line segments connecting points for each species
+        svg.selectAll('line')
+          .data(links)
           .enter()
-          .append('path')
+          .append('line')
           .attr("class", "species lines")
-          .attr("id", function(d) {return d.key})
-          .attr("d", function(d) {return drawLine(d.values)})
-          .attr("stroke", function(d) {
-            return colscale(d.values[0]['maxLCL'])})
+          .attr("id", function(d) {return d.Species})
+          .attr("x1", function(d) {return xscale(d.Host1)})
+          .attr("x2", function(d) {return xscale(d.Host2)})
+          .attr("y1", function(d) {return yscale(d.Biov1)})
+          .attr("y2", function(d) {return yscale(d.Biov2)})
+          .attr("stroke", function(d) {return colscale(d.maxLCL)})
           .attr("stroke-width", 1)
           .attr("stroke-opacity", 0.1)
           .attr("fill", "none");
+
+
+
+
+
+
 
 
 
@@ -214,6 +245,7 @@
 
   d3.csv("data.csv", function(d) { //d refers to row in csv file
     d['maxLCL'] = +d['maxLCL']; // 'unary' operator converts strings to number; Javscript trick
+    d['Host.no'] = +d['Host.no'];
     d['Biovolume'] = +d['Biovolume'];
     if(!isNaN(d['Biovolume'])) {return d}; // remove all rows where biovolume couldn't be coerced to a number
   }, draw);
