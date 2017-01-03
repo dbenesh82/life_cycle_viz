@@ -1,4 +1,4 @@
-Parasite.species,Parasite.group,minLCL,maxLCL,midLCL,Host.no,Facultative,Stage,Def.int,Flex.cycle,Length,Width,Biovolume,Host.nofac,Trans.to.int,trans.to.def,trans.to.fac,trans.to.human,complete_size
+Parasite.species,Parasite.group,minLCL,maxLCL,midLCL,Host.no,Facultative,Stage,Def.int,Flex.cycle,Length,Width,Biovolume,Host.nofac,trans_to_int,trans_to_def,trans_to_fac,trans_to_human,complete_size
 Abbreviata antarctica,nematode,2,2,2,0,NA,embryo,NA,no,NA,NA,NA,propagule,yes,no,no,no,all missing
 Abbreviata antarctica,nematode,2,2,2,1,no,1larv,int,no,1.6,NA,NA,1st,no,yes,no,no,all missing
 Abbreviata antarctica,nematode,2,2,2,2,no,adult,def,no,NA,NA,NA,2nd,no,no,no,no,all missing
