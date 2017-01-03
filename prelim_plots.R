@@ -81,6 +81,7 @@ dataL.sp <- mutate(dataL.sp,
 
 #add host variables
 host.fac <- select(dataH, Parasite.species, Host.no, Facultative, Def.int)%>%distinct()
+host.fac <- mutate(host.fac, Facultative_bool = ifelse(Facultative != 'no', 'yes', 'no'))
 dataL.sp <- left_join(dataL.sp, host.fac)
 #infects humans?
 humans <- filter(dataH, Host.species == "Homo sapiens")%>%select(Parasite.species, Host.no)%>%
@@ -92,7 +93,7 @@ rm(maxLCL, minLCL, prop, host.fac, humans)
 
 #rearrange columns for clarity
 dataL.sp <- select(dataL.sp, Parasite.species, Parasite.group, minLCL, maxLCL, midLCL, 
-                   Host.no, Facultative, Stage, Def.int, Flex.cycle, human,
+                   Host.no, Facultative, Facultative_bool, Stage, Def.int, Flex.cycle, human,
                    Length, Width, Biovolume)
 
 
@@ -124,7 +125,7 @@ for(i in seq_along(dataL.sp$Def.int)){
     dataL.sp$trans.to.human[i] <- "yes"
   }
 }
-dataL.sp <- select(dataL.sp, -human)
+
 
 
 #create variable if size measurements over cycle are complete

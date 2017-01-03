@@ -297,11 +297,11 @@
           })
         d3.select("button#To_facultative_host", colscale(8), 1, 5)
           .on('click', function() {
-            update('trans_to_fac', 'yes', 'to_fac', 'yes', colscale(9), 1, 5)
+            update('Facultative_bool', 'yes', 'to_fac', 'yes', colscale(9), 1, 5)
           })
         d3.select("button#To_humans")
           .on('click', function() {
-            update('trans_to_human', 'yes', 'to_hum', 'yes', colscale(10), 1, 5)
+            update('human', 'yes', 'to_hum', 'yes', colscale(10), 1, 5)
           })
 
 
@@ -321,7 +321,7 @@
     Use D3 to load the data
     */
 
-  d3.csv("data2.csv", function(d) { //d refers to row in csv file
+  d3.csv("data3.csv", function(d) { //d refers to row in csv file
     d['maxLCL'] = +d['maxLCL']; // 'unary' operator converts strings to number; Javscript trick
     d['Host.no'] = +d['Host.no'];
     d['Biovolume'] = +d['Biovolume'];
