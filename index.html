@@ -17,12 +17,15 @@
       stroke-width: 0;
     }
     div.buttons {
-      position: fixed;
-      top: 50px;
-      left: 50px;
-      background-color: gray;
+      text-align: center;
+      font-size: small;
+      background-color: lightgray;
+      border: 1px solid black;
       padding: 3px;
-      margin: 7px;
+      margin: 5px;
+    }
+    div.button_container {
+      align: center;
     }
   </style>
   </head>
@@ -39,16 +42,31 @@
             canvaswidth = chartwidth + margin.right + margin.left,
             canvasheight = chartheight + margin.top + margin.bottom;
 
-        var buttons = d3.select("body")
-          .append("div")
-          .attr('class', 'buttons')
-          .text('Press Me')
 
         d3.select("body") // add a title
           .append('h2')
           .text("Parasite life cycles");
 
+        // create container for buttons
+        var button_container = d3.select("body")
+          .append("div")
+          .attr('class', 'button_container')
+          .attr('width', canvaswidth)
 
+        // create buttons for interactivity
+        var buttons = button_container.selectAll("div")
+          .data(["Random species", "1-host cycles", "2-host cycles", "3-host cycles", "4+ host cycles",
+                "To intermediate host", "To definitive host", "To facultative host", "To humans"])
+          .enter()
+          .append('div')
+          .attr('class', 'buttons')
+          .text(function(d) {return d;})
+          .style('width', chartwidth / 5 + "px")
+          .style('float', 'left')
+
+
+
+        // create svg as last element within body
         var svg = d3.select("body")
             .append("svg")
             .attr("width", canvaswidth)
@@ -151,14 +169,34 @@
               .transition()
               .duration(1500)
               .attr('fill', function(d) {
-                return colscale(d['minLCL']);
-              });
+                if(d['Parasite.species'] == "Schistocephalus solidus") {
+                  return 'red';
+                } else {
+                  return 'gray'
+                }
+                //return colscale(d['minLCL']);
+              })
+              .attr('opacity', function(d) {
+                if(d['Parasite.species'] == "Schistocephalus solidus") {
+                  return 1;
+                }
+              })
+              .attr('r', function(d) {
+                if(d['Parasite.species'] == "Schistocephalus solidus") {
+                  return 10;
+                }
+              })
             // update color scheme for lines
             svg.selectAll('.species.lines')
               .transition()
               .duration(1500)
               .attr("stroke", function(d) {
-                return colscale(d.values[0]['minLCL']);
+                if(d.key == "Schistocephalus solidus") {
+                  return 'red';
+                } else {
+                  return 'gray'
+                }
+                //return colscale(d.values[0]['minLCL']);
               });
 
           })
