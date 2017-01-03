@@ -56,7 +56,7 @@
         // create buttons for interactivity
         var buttons = button_container.selectAll("div")
           .data(["Random species", "One host cycles", "Two host cycles", "Three host cycles", "Four plus host cycles",
-                "To intermediate host", "To definitive host", "To facultative host", "To humans"])
+                "To intermediate host", "To definitive host", "To facultative host", "To humans", "RESET"])
           .enter()
           .append('div')
           .attr('class', 'buttons')
@@ -201,7 +201,7 @@
           cond_points and cond_lines should return true/false
           */
 
-          // update points based on cond_points
+          // update points
           svg.selectAll("circle")
             .transition()
             .duration(1500)
@@ -223,7 +223,7 @@
               }
             });
 
-          // update color scheme for lines
+          // update lines
           svg.selectAll("line.species.lines")
             .transition()
             .duration(1500)
@@ -277,57 +277,32 @@
         d3.select("div#Random_species")
           .on('click', function() {
             update('Parasite.species', randsp, 'Species', randsp)
+          }) // needs to be able to repeat!
+
+
+
+        d3.select("div#To_intermediate_host")
+          .on('click', function() {
+            update('trans_to_int', 'yes', 'to_int', 'yes')
+          })
+        d3.select("div#To_definitive_host")
+          .on('click', function() {
+            update('trans_to_def', 'yes', 'to_def', 'yes')
+          })
+        d3.select("div#To_facultative_host")
+          .on('click', function() {
+            update('trans_to_fac', 'yes', 'to_fac', 'yes')
+          })
+        d3.select("div#To_humans")
+          .on('click', function() {
+            update('trans_to_human', 'yes', 'to_hum', 'yes')
           })
 
 
-
-            d3.select("div#To_definitive_host")
-              .on('click', function() {
-                // update color scheme for points
-                svg.selectAll("circle")
-                  .transition()
-                  .duration(1500)
-                  .attr('fill', function(d) {
-                    if(d['trans_to_def'] == 'yes') {
-                      return 'red';
-                    } else {
-                      return 'gray'
-                    }
-                  })
-                  .attr('opacity', function(d) {
-                    if(d['trans_to_def'] == 'yes') {
-                      return 1;
-                    }
-                  })
-                  .attr('r', function(d) {
-                    if(d['trans_to_def'] == 'yes') {
-                      return 5;
-                    }
-                  });
-
-
-                // update color scheme for lines
-                svg.selectAll("line.species.lines")
-                  .transition()
-                  .duration(1500)
-                  .attr("stroke", function(d) {
-                    if(d['to_def'] == 'yes') {
-                      return 'red';
-                    } else {
-                      return 'gray'
-                    }
-                  })
-                  .attr("stroke-opacity", function(d) {
-                    if(d['to_def'] == 'yes') {
-                      return 1;
-                    } else {
-                      return 0.05;
-                    }
-                  });
-              })
-
-
-
+        d3.select("div#RESET")
+          .on('click', function() {
+            draw(data)
+          })
 
 
         } //end of draw function
