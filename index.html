@@ -162,11 +162,14 @@
               Biov1: size1,
               Biov2: size2,
               maxLCL: data[i]['maxLCL']
+              to_int: data[i]['trans.to.int']
+              to_def: data[i]['trans.to.def']
+              to_fac: data[i]['trans.to.fac']
+              to_hum: data[i]['trans.to.human']
             };
           links.push(link_row); // add link data to a data array
           };
         };
-        debugger;
 
         // add line segments connecting points for each species
         svg.selectAll('line')
@@ -183,7 +186,6 @@
           .attr("stroke-width", 1)
           .attr("stroke-opacity", 0.1)
           .attr("fill", "none");
-
 
 
 
