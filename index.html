@@ -323,10 +323,53 @@
             "Parasite species with three-host life cycles infect two intermediate hosts before reproducing in the third (definitive) host. Growth can occur at any stage, but it is common that little growth occurs in the second intermediate host.")
           })
 
-        d3.select("button#Four_plus_host_cycles") // needs work!
+
+        d3.select("button#Four_plus_host_cycles") // cannot use update functions for this button, as conditional statements are more complex
           .on('click', function() {
-            update_points('maxLCL', 4, colscale(4), 1, 5)
-            update_lines('maxLCL', 4, colscale(4), 1)
+            // pick
+            svg.selectAll("circle")
+              .transition()
+              .duration(1500)
+              .attr('fill', function(d) {
+                if(d['maxLCL'] == 4 || d['maxLCL'] == 5) {
+                  return colscale(4);
+                } else {
+                  return 'gray';
+                }
+              })
+              .attr('opacity', function(d) {
+                if(d['maxLCL'] == 4 || d['maxLCL'] == 5) {
+                  return 1;
+                } else {
+                  return 0.05;
+                }
+              })
+              .attr('r', function(d) {
+                if(d['maxLCL'] == 4 || d['maxLCL'] == 5) {
+                  return 5;
+                } else {
+                  return 3
+                }
+              });
+
+            svg.selectAll("line.species.lines")
+              .transition()
+              .duration(1500)
+              .attr("stroke", function(d) {
+                if(d['maxLCL'] == 4 || d['maxLCL'] == 5) {
+                  return colscale(4);
+                } else {
+                  return 'gray'
+                }
+              })
+              .attr("stroke-opacity", function(d) {
+                if(d['maxLCL'] == 4 || d['maxLCL'] == 5) {
+                  return 1;
+                } else {
+                  return 0.05;
+                }
+              });
+
             update_annotation("Species with four or more hosts", colscale(4))
             update_explanation(
             "Few parasites have cycles longer than three hosts. Growth may or may not occur in the intermediate hosts, and often the intermediate hosts are facultative. The parasite can complete the cycle with or without infecting them.")
