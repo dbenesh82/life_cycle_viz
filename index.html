@@ -195,8 +195,9 @@
 
 
 
+
         var update = function(data_var_points, data_grp_points, data_var_lines, data_grp_lines,
-        grp_color, grp_opacity, grp_r) {
+        grp_color, grp_opacity, grp_r, text_for_annotation) {
           /*
           function takes into conditions for highlighting points and lines
           cond_points and cond_lines should return true/false
@@ -246,62 +247,84 @@
                 return 0.05;
               }
             });
+
+            // remove old annotation, add/update new one
+            svg.select(".annotation")
+              .remove()
+            svg.append("text")
+              .transition()
+              .duration(1500)
+              .attr('class', 'annotation')
+              .attr("text-anchor", "middle")
+              .attr("transform", "translate(" + xscale("3rd") + "," + yscale(1e-5) + ")")
+              .text(text_for_annotation)
+              .attr('fill', grp_color);
+
           }
 
 
         // make buttons functional
         d3.select("button#One_host_cycles")
-            .on('click', function() {
-              update('maxLCL', 1, 'maxLCL', 1, colscale(1), 1, 5)
-            })
+          .on('click', function() {
+            update('maxLCL', 1, 'maxLCL', 1, colscale(1), 0.5, 5,
+            "Species with one host cycles")
+          })
 
         d3.select("button#Two_host_cycles")
           .on('click', function() {
-            update('maxLCL', 2, 'maxLCL', 2, colscale(2), 1, 5)
+            update('maxLCL', 2, 'maxLCL', 2, colscale(2), 0.3, 5,
+            "Species with two host cycles")
           })
 
         d3.select("button#Three_host_cycles")
           .on('click', function() {
-            update('maxLCL', 3, 'maxLCL', 3, colscale(3), 1, 5)
+            update('maxLCL', 3, 'maxLCL', 3, colscale(3), 0.5, 5,
+            "Species with three host cycles")
           })
 
         d3.select("button#Four_plus_host_cycles") // needs work!
           .on('click', function() {
-            update('maxLCL', 4, 'maxLCL', 4, colscale(4), 1, 5)
+            update('maxLCL', 4, 'maxLCL', 4, colscale(4), 1, 5,
+            "Species with four host cycles")
           })
 
 
-        // update color scheme for a random species
-        var species = d3.set(); // make set of species
+        // make set of species for use with random species button
+        var species = d3.set();
         data.forEach( function(d) {
           species.add(d['Parasite.species']);
         });
-        var randsp = species.values()[
-          Math.random() * species.values().length | 0
-        ]
 
         d3.select("button#Random_species")
           .on('click', function() {
-            update('Parasite.species', randsp, 'Species', randsp, 'red', 1, 5)
-          }) // needs to be able to repeat!
+            var randsp = species.values()[
+              Math.random() * species.values().length | 0
+            ]
+            update('Parasite.species', randsp, 'Species', randsp, 'red', 1, 5,
+            randsp)
+          })
 
 
 
         d3.select("button#To_intermediate_host")
           .on('click', function() {
-            update('Def.int', 'int', 'to_int', 'yes', colscale(5), 0.5, 5)
+            update('Def.int', 'int', 'to_int', 'yes', colscale(5), 0.4, 5,
+            "Transmission routes to intermediate hosts")
           })
         d3.select("button#To_definitive_host")
           .on('click', function() {
-            update('Def.int', 'def', 'to_def', 'yes', colscale(7), 0.5, 5)
+            update('Def.int', 'def', 'to_def', 'yes', colscale(7), 0.3, 5,
+            "Transmission routes to definitive hosts")
           })
         d3.select("button#To_facultative_host", colscale(8), 1, 5)
           .on('click', function() {
-            update('Facultative_bool', 'yes', 'to_fac', 'yes', colscale(9), 1, 5)
+            update('Facultative_bool', 'yes', 'to_fac', 'yes', colscale(9), 1, 5,
+            "Transmission to facultative hosts")
           })
         d3.select("button#To_humans")
           .on('click', function() {
-            update('human', 'yes', 'to_hum', 'yes', colscale(10), 1, 5)
+            update('human', 'yes', 'to_hum', 'yes', colscale(10), 1, 5,
+            "Transmission to humans")
           })
 
 
