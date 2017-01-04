@@ -249,14 +249,14 @@
             });
 
             // remove old annotation, add/update new one
-            svg.select(".annotation")
-              .remove()
-            svg.append("text")
-              .transition()
-              .duration(1500)
+            svg.select(".annotation") //remove old annotation, if any
+              .remove();
+            var annotation = svg.append("text") // (re)create a text element
               .attr('class', 'annotation')
               .attr("text-anchor", "middle")
-              .attr("transform", "translate(" + xscale("3rd") + "," + yscale(1e-5) + ")")
+              .attr("transform", "translate(" + xscale("3rd") + "," + yscale(1e-5) + ")");
+            annotation.transition()
+              .duration(1500)
               .text(text_for_annotation)
               .attr('fill', grp_color);
 
