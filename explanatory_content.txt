@@ -1,0 +1,27 @@
+Text for buttons
+Initial
+"Trophically-transmitted parasites. Let's use a life cycle database to examine patterns in the growth of complex life cycle parasites."
+
+One-host
+"Parasite species that infect just one host during their life cycle have simple life cycles. Their lone host is usually a vertebrate and they grow substantially in their lone host."
+
+Two-host
+"Parasite species that obligatorily infect multiple hosts have complex life cycles. The first host is called the intermediate host, and the second host is the definitive host. Reproduction occurs in the definitive host. Parasites with two-host cycles usually grow in both hosts, but particularly the definitive host."
+
+Three-host
+"Parasite species with three-host life cycles infect two intermediate hosts before reproducing in the third (definitive) host. Growth can occur at any stage, but it is common that little growth occurs in the second intermediate host."
+
+Four-host
+"Relatively few parasites have cycles longer than three hosts. Growth in the intermediate hosts is variable. Often, intermediate hosts in these long cycles are not obligatory, i.e. the parasite can complete the cycle with or without them."
+
+Int-host
+"Parasites use intermediate hosts for growth, development, and transportation. Growth in the first host appears common, whereas growth in latter hosts may or may not occur."
+
+Def-host
+"Parasites reproduce in their definitive host. In many animals, larger size is associated with higher fecundity; bigger females make more eggs. Thus, it is not surprising that parasites usually grow significantly in their final host."
+
+Fac-host
+"Most parasites have a fixed succession of hosts they have to infect to complete the life cycle. But some don't; they have flexible life cycles with facultative hosts that are not needed. Commonly, the hosts in the middle of cycle (2nd host) are facultative and growth is minimal in such hosts."
+
+Humans
+We, as a species, also have our share of worms! Species that infect humans (we are usually definitive hosts) tend to do quite well (exhibit substantial growth).

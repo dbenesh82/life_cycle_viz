@@ -24,9 +24,14 @@
       padding: 3px;
       margin: 5px;
     }
+    button.buttons:hover {
+      background-color: darkgray;
+      cursor: pointer;
+    }
     div.button_container {
       align: center;
     }
+
   </style>
   </head>
 
@@ -188,6 +193,12 @@
             .attr("stroke-width", 1)
             .attr("stroke-opacity", 0.1)
             .attr("fill", "none");
+
+            d3.select('body')
+              .append('div')
+              .attr('class', 'explanation')
+              .text("Trophically-transmitted parasites. Let's use a life cycle database to examine patterns in the growth of complex life cycle parasites.")
+              .style('width', canvaswidth + "px");
           }
           plot_geoms()
 
@@ -197,7 +208,7 @@
 
 
         var update = function(data_var_points, data_grp_points, data_var_lines, data_grp_lines,
-        grp_color, grp_opacity, grp_r, text_for_annotation) {
+        grp_color, grp_opacity, grp_r, text_for_annotation, text_for_explanation) {
           /*
           function takes into conditions for highlighting points and lines
           cond_points and cond_lines should return true/false
@@ -260,6 +271,14 @@
               .text(text_for_annotation)
               .attr('fill', grp_color);
 
+            // add an explanatory text below chart for each scenario
+            d3.select(".explanation") //remove old annotation, if any
+              .remove();
+            d3.select('body')
+              .append('div')
+              .attr('class', 'explanation')
+              .text(text_for_explanation)
+              .style('width', canvaswidth + "px");
           }
 
 
@@ -267,25 +286,29 @@
         d3.select("button#One_host_cycles")
           .on('click', function() {
             update('maxLCL', 1, 'maxLCL', 1, colscale(1), 0.5, 5,
-            "Species with one host cycles")
+            "Species with one host cycles",
+            "Parasite species that infect just one host during their life cycle have simple life cycles. Their lone host is usually a vertebrate and they grow substantially in their lone host.")
           })
 
         d3.select("button#Two_host_cycles")
           .on('click', function() {
             update('maxLCL', 2, 'maxLCL', 2, colscale(2), 0.3, 5,
-            "Species with two host cycles")
+            "Species with two host cycles",
+            "Parasite species that obligatorily infect multiple hosts have complex life cycles. The first host is called the intermediate host, and the second host is the definitive host. Reproduction occurs in the definitive host. Parasites with two-host cycles usually grow in both hosts, but particularly the definitive host.")
           })
 
         d3.select("button#Three_host_cycles")
           .on('click', function() {
             update('maxLCL', 3, 'maxLCL', 3, colscale(3), 0.5, 5,
-            "Species with three host cycles")
+            "Species with three host cycles",
+            "Parasite species with three-host life cycles infect two intermediate hosts before reproducing in the third (definitive) host. Growth can occur at any stage, but it is common that little growth occurs in the second intermediate host.")
           })
 
         d3.select("button#Four_plus_host_cycles") // needs work!
           .on('click', function() {
             update('maxLCL', 4, 'maxLCL', 4, colscale(4), 1, 5,
-            "Species with four host cycles")
+            "Species with four host cycles",
+            "Relatively few parasites have cycles longer than three hosts. Growth in the intermediate hosts is variable. Often, intermediate hosts in these long cycles are not obligatory, i.e. the parasite can complete the cycle with or without them.")
           })
 
 
@@ -300,8 +323,12 @@
             var randsp = species.values()[
               Math.random() * species.values().length | 0
             ]
+            var rsdata = data.filter(function(d)
+             {return d['Parasite.species'] == randsp}); // subset data to rand species
+            var rsannotation = randsp + ", " + rsdata[0]['maxLCL'] + " host cycle, " + rsdata[0]['complete_size']
             update('Parasite.species', randsp, 'Species', randsp, 'red', 1, 5,
-            randsp)
+            rsannotation,
+            "")
           })
 
 
@@ -309,22 +336,26 @@
         d3.select("button#To_intermediate_host")
           .on('click', function() {
             update('Def.int', 'int', 'to_int', 'yes', colscale(5), 0.4, 5,
-            "Transmission routes to intermediate hosts")
+            "Growth in intermediate hosts",
+            "Parasites use intermediate hosts for growth, development, and transportation. Growth in the first host appears common, whereas growth in latter hosts may or may not occur.")
           })
         d3.select("button#To_definitive_host")
           .on('click', function() {
             update('Def.int', 'def', 'to_def', 'yes', colscale(7), 0.3, 5,
-            "Transmission routes to definitive hosts")
+            "Growth in definitive hosts",
+            "Parasites reproduce in their definitive host. In many animals, larger size is associated with higher fecundity; bigger females make more eggs. Thus, it is not surprising that parasites usually grow significantly in their final host.")
           })
         d3.select("button#To_facultative_host", colscale(8), 1, 5)
           .on('click', function() {
             update('Facultative_bool', 'yes', 'to_fac', 'yes', colscale(9), 1, 5,
-            "Transmission to facultative hosts")
+            "Growth in facultative hosts",
+            "Most parasites have a fixed succession of hosts they have to infect to complete the life cycle. But some don't; they have flexible life cycles with facultative hosts that are not needed. Commonly, the hosts in the middle of cycle (2nd host) are facultative and growth is minimal in such hosts.")
           })
         d3.select("button#To_humans")
           .on('click', function() {
             update('human', 'yes', 'to_hum', 'yes', colscale(10), 1, 5,
-            "Transmission to humans")
+            "Growth in humans",
+            "We, as a species, also have our share of worms! Species that infect humans (we are usually definitive hosts) tend to do quite well (exhibit substantial growth).")
           })
 
 
