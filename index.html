@@ -199,7 +199,8 @@
           .append('div')
           .attr('class', 'explanation')
           .text("The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. Such parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. This interactive shows how parasitic worms grow as they traverse their life cycles. Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Colors correspond to species with different life cycle lengths.")
-          .style('width', canvaswidth + "px");
+          .style('width', canvaswidth + "px")
+          .style("opacity", 1);
 
 
 
@@ -262,32 +263,34 @@
 
         var update_annotation = function(text_for_annotation, color) {
           // remove old annotation, add/update new one
-          svg.select(".annotation") //remove old annotation, if any
-            .remove();
-          svg.append("text") // (re)create a text element
-            .attr('class', 'annotation')
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(" + xscale("3rd") + "," + yscale(1e-5) + ")");
-          svg.select(".annotation") // transition text in
+          svg.selectAll(".annotation") //remove old annotation, if any
             .transition()
             .duration(1500)
+            .style("opacity", 0)
+            .remove();
+          svg.append('text') // (re)create a text element
+            .style("opacity", 0)
+            .attr('class', 'annotation')
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(" + xscale("3rd") + "," + yscale(1e-5) + ")")
             .text(text_for_annotation)
-            .attr('fill', color);
+            .attr('fill', color)
+            .transition() // transition text in
+            .duration(1500)
+            .style("opacity", 1);
           }
 
         var update_explanation = function(text_for_explanation) {
           // remove old explanatory text, add/update new one below chart for each scenario
-          d3.select(".explanation") //remove old annotation, if any
-            .remove();
-          d3.select('body') // re-create new one
-            .append('div')
-            .attr('class', 'explanation')
-            .style('width', canvaswidth + "px");
-          d3.select(".explanation") // wait to fill it with text
+          d3.selectAll(".explanation")
             .transition()
-            .delay(1000)
-            .text(text_for_explanation)
-        }
+            .duration(750)
+            .style("opacity", 0) // fade out explanation
+            .transition()
+            .duration(750)
+            .text(text_for_explanation) // fade in new text
+            .style("opacity", 1)
+          }
 
 
 
