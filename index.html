@@ -37,6 +37,12 @@
 
 
 <body>
+  <h2>Parasite growth across a complex life cycles</h2>
+  <div>More details about the database, as well as the data itself, can be found
+     <a href='http://onlinelibrary.wiley.com/doi/10.1002/ecy.1680/full'
+     target="_blank">here</a>
+   </div>
+
   <script type="text/javascript">
     function draw(data) {
         "use strict";
@@ -47,10 +53,6 @@
             canvaswidth = chartwidth + margin.right + margin.left,
             canvasheight = chartheight + margin.top + margin.bottom;
 
-
-        d3.select("body") // add a title
-          .append('h2')
-          .text("Parasite life cycles");
 
         // create container for buttons
         var button_container = d3.select("body")
@@ -197,7 +199,7 @@
             d3.select('body')
               .append('div')
               .attr('class', 'explanation')
-              .text("Trophically-transmitted parasites. Let's use a life cycle database to examine patterns in the growth of complex life cycle parasites.")
+              .text("The life cycles of parasitic organisms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. These parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms like tapeworms and roundworms. This interactive uses a life cycle database to examine how parasitic worms divide their growth among their multiple hosts.")
               .style('width', canvaswidth + "px");
           }
           plot_geoms()
