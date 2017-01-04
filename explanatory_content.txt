@@ -1,27 +1,31 @@
 Text for buttons
 Initial
-"The life cycles of parasitic organisms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. These parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms like tapeworms and roundworms. This interactive uses a life cycle database to examine how parasitic worms divide their growth among their multiple hosts. More details about the database, as well as the data itself, can be found <a href='http://onlinelibrary.wiley.com/doi/10.1002/ecy.1680/full'>here</a>."
+"The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. Such parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. 
+This interactive shows how parasitic worms grow as they traverse their life cycles. Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Colors correspond to species with different life cycle lengths."
 
 One-host
-"Parasite species that infect just one host during their life cycle have simple life cycles. Their lone host is usually a vertebrate and they grow substantially in their lone host."
+"Parasite species that infect just one host have simple life cycles. Their lone host is usually a vertebrate in which they grow substantially."
 
 Two-host
-"Parasite species that obligatorily infect multiple hosts have complex life cycles. The first host is called the intermediate host, and the second host is the definitive host. Reproduction occurs in the definitive host. Parasites with two-host cycles usually grow in both hosts, but particularly the definitive host."
+"Parasite species that obligatorily infect multiple hosts have complex life cycles. The first host is the intermediate host, and the second host is the definitive host. Reproduction occurs in the definitive host. Parasites with two-host cycles usually grow in both hosts, but particularly the definitive host."
 
 Three-host
 "Parasite species with three-host life cycles infect two intermediate hosts before reproducing in the third (definitive) host. Growth can occur at any stage, but it is common that little growth occurs in the second intermediate host."
 
 Four-host
-"Relatively few parasites have cycles longer than three hosts. Growth in the intermediate hosts is variable. Often, intermediate hosts in these long cycles are not obligatory, i.e. the parasite can complete the cycle with or without them."
+"Few parasites have cycles longer than three hosts. Growth may or may not occur in the intermediate hosts, and often the intermediate hosts are facultative. The parasite can complete the cycle with or without infecting them."
+
+Random species
+"The database contains 973 parasite species. Body size data was not always available for every life cycle stage."
 
 Int-host
-"Parasites use intermediate hosts for growth, development, and transportation. Growth in the first host appears common, whereas growth in latter hosts may or may not occur."
+"Parasites use intermediate hosts for growth, development, and transportation between hosts, but not for reproduction. Growth in a first intermediate host is common, whereas growth in latter hosts may or may not occur."
 
 Def-host
-"Parasites reproduce in their definitive host. In many animals, larger size is associated with higher fecundity; bigger females make more eggs. Thus, it is not surprising that parasites usually grow significantly in their final host."
+"Parasites reproduce in their definitive host. In many animals, bigger females make more eggs. Thus, it is not surprising that parasites usually grow significantly in their final host."
 
 Fac-host
-"Most parasites have a fixed succession of hosts they have to infect to complete the life cycle. But some don't; they have flexible life cycles with facultative hosts that are not needed. Commonly, the hosts in the middle of cycle (2nd host) are facultative and growth is minimal in such hosts."
+"Most parasites have a fixed succession of hosts they must infect to complete the life cycle. But some do not. They have flexible life cycles with some hosts being only facultatively infected. Commonly, facultative hosts are in the middle of a cycle (2nd host) and growth is minimal."
 
 Humans
-"We, as a species, also have our share of worms! Species that infect humans (we are usually definitive hosts) tend to do quite well (exhibit substantial growth)."
+"We also have our share of worms! Several worms that infect humans exhibit substantial growth; we are usually definitive hosts."
