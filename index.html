@@ -172,7 +172,7 @@
               return xscale(d['Host.nofac']);
             })
             .attr('cy', function(d) {
-              return yscale(d['Biovolume']); // need to filter out NaN values
+              return yscale(d['Biovolume']);
             })
             .attr('r', 3)
             .attr('fill', function(d) {
@@ -363,7 +363,33 @@
 
         d3.select("button#RESET")
           .on('click', function() {
-            plot_geoms()
+            svg.selectAll("circle")
+              .transition()
+              .duration(1500)
+              .attr('r', 3)
+              .attr('fill', function(d) {
+                return colscale(d['maxLCL']);
+              })
+              .attr('opacity', 0.05);
+
+            // add line segments connecting points for each species
+            svg.selectAll('line')
+              .transition()
+              .duration(1500)
+              .attr("stroke", function(d) {return colscale(d.maxLCL)})
+              .attr("stroke-width", 1)
+              .attr("stroke-opacity", 0.1)
+              .attr("fill", "none");
+
+            d3.select(".explanation") //remove old annotation, if any
+              .remove();
+            d3.select(".annotation") //remove old explanation, if any
+              .remove();
+            d3.select('body')
+              .append('div')
+              .attr('class', 'explanation')
+              .text("The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. Such parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. This interactive shows how parasitic worms grow as they traverse their life cycles. Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Colors correspond to species with different life cycle lengths.")
+              .style('width', canvaswidth + "px");
           })
 
 
