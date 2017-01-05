@@ -1,0 +1,60 @@
+div.main_container{
+  position: relative;
+  left: 50%;
+  margin: 10px;
+  padding: 10px;
+  border-width: thin;
+  border-color: black;
+  border-style: solid;
+  }
+h2 {
+  color: black;
+  text-align: center;
+}
+div#source_ref {
+  font-size: 20px;
+  text-align: center;
+}
+.grid line {
+  stroke: lightgrey;
+  stroke-dasharray: 3;
+  stroke-opacity: 0.5;
+  shape-rendering: crispEdges;
+}
+.grid path {
+  stroke-width: 0;
+}
+text.ticklabels{
+  font-size: 15px;
+}
+text.x.title{
+  text-anchor: end;
+  font-size: 18px;
+}
+text.y.title{
+  text-anchor: middle;
+  font-size: 18px;
+}
+button.buttons {
+  float: left;
+  text-align: center;
+  font-size: small;
+  background-color: lightgray;
+  border: 1px solid black;
+  padding: 3px;
+  margin: 5px;
+}
+button.buttons:hover {
+  background-color: darkgray;
+  cursor: pointer;
+}
+div.button_container {
+  align: center;
+}
+text.annotation {
+  font-size: 22px;
+}
+div.explanation {
+  text-align: justify;
+  font-size: 16px;
+}
