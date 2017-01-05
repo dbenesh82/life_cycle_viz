@@ -77,20 +77,21 @@
    </div>
 
    <div class="main_container">
-     <!--populated by D3 javascript--->
+     <!--this div is populated by the javascript--->
    </div>
 
   <script type="text/javascript">
     function draw(data) {
         "use strict";
 
+        // set margins for plot
         var margin = {top: 10, right: 10, bottom: 60, left: 80},
             chartwidth = 750,
             chartheight = 500,
             canvaswidth = chartwidth + margin.right + margin.left,
             canvasheight = chartheight + margin.top + margin.bottom;
 
-        //create container for chart and its elements
+        // set the size of the main container for the interactive plot
         d3.select(".main_container")
           .style('width', canvaswidth)
           .style('margin-left', -canvaswidth/2);
@@ -116,8 +117,7 @@
           .style('height', '40px')
 
 
-
-        // create svg as last element within body
+        // create svg element as the chart
         var svg = d3.select(".main_container")
             .append("svg")
             .attr("width", canvaswidth)
@@ -145,7 +145,7 @@
           .attr('class', 'x axis')
           .attr('transform', "translate(0," + chartheight + ")")
           .call(xaxis);
-        svg.append("text") // add title
+        svg.append("text") // add x title
           .attr('class', 'x title')
           .attr("transform", "translate("+ (margin.left + chartwidth/2) + "," +
            (margin.top + chartheight + (margin.bottom/1.5)) +")")  // center below axis
@@ -158,22 +158,22 @@
           .attr("class", "grid")
           .attr('transform', "translate(" + margin.left + ",0)")
           .call(yaxis.ticks(5)
-            .tickSize(-chartwidth + margin.right)
+            .tickSize(-chartwidth + margin.left)
             .tickFormat("")
             )
-        svg.append('text') // add title
+        svg.append('text') // add y title
           .attr('class', 'y title')
           .attr("transform", "translate("+ (margin.left/3) + "," +
            (margin.top + (chartheight/2)) + ") rotate(-90)")
           .text('Biovolume (mm cubed)');
-        d3.selectAll('.tick').select('text')
+        d3.selectAll('.tick').select('text') // assign class to ticklabels; can refer to it in CSS
           .attr('class', 'ticklabels')
 
 
           /*
-          to interactively highlight each connection (also within species)
+          to interactively highlight each connection between points
           need to have each line independent (i.e. not a path). This loop
-          restructures data as links between points, so as to make the lines
+          restructures data as links between points, and is used to make the lines
           */
           var links = []
           for(var i = 0; i < (data.length - 1); i += 1) {
@@ -183,7 +183,7 @@
                 size2 = data[i + 1]["Biovolume"],
                 hostn1 = data[i]["Host.no"],
                 hostn2 = data[i + 1]["Host.no"];
-            if( (sp1 == sp2) && ((hostn2 - hostn1) == 1)) { // create new data object
+            if( (sp1 == sp2) && ((hostn2 - hostn1) == 1)) { // create new data object (row)
               var link_row = {
                 Species: sp1,
                 Host1: data[i]['Host.nofac'],
@@ -196,7 +196,7 @@
                 to_fac: data[i]['trans_to_fac'],
                 to_hum: data[i]['trans_to_human']
               };
-            links.push(link_row); // add link data to a data array
+            links.push(link_row); // add each 'link' to a data array
             };
           };
 
@@ -222,7 +222,7 @@
           })
           .attr('opacity', 0.05);
 
-        // add line segments connecting points for each species
+        // plot line segments connecting points for each species
         svg.selectAll('line')
           .data(links)
           .enter()
@@ -238,6 +238,7 @@
           .attr("stroke-opacity", 0.1)
           .attr("fill", "none");
 
+        // add explanatory text box below the svg
         d3.select('.main_container')
           .append('div')
           .attr('class', 'explanation')
@@ -247,6 +248,7 @@
 
 
 
+        // create functions to interactively update plot elements (points, lines, text)
         var update_points = function(data_var, data_grp, color, opacity, r) {
           /*
           updates points based on a conditional where a variable ('data_var')
@@ -324,7 +326,7 @@
           }
 
         var update_explanation = function(text_for_explanation) {
-          // remove old explanatory text, add/update new one below chart for each scenario
+          // remove old explanatory text, add/update new one below chart
           d3.selectAll(".explanation")
             .transition()
             .duration(750)
@@ -338,7 +340,7 @@
 
 
 
-        // make buttons functional
+        // make each button functional
         d3.select("button#One_host_cycles")
           .on('click', function() {
             update_points('maxLCL', 1, colscale(1), 0.5, 5)
@@ -367,9 +369,9 @@
           })
 
 
-        d3.select("button#Four_plus_host_cycles") // cannot use update functions for this button, as conditional statements are more complex
+        d3.select("button#Four_plus_host_cycles")
           .on('click', function() {
-            // pick
+            // had to re-write update function for this button as conditional statements were more complex
             svg.selectAll("circle")
               .transition()
               .duration(1500)
@@ -517,14 +519,14 @@
 
   <script type="text/javascript">
   /*
-    Use D3 to load the data
+    Use D3 to load the data and pass it to draw function
     */
 
-  d3.csv("data3.csv", function(d) { //d refers to row in csv file
-    d['maxLCL'] = +d['maxLCL']; // 'unary' operator converts strings to number; Javscript trick
+  d3.csv("data3.csv", function(d) {
+    d['maxLCL'] = +d['maxLCL']; // converts important columns from strings to numbers
     d['Host.no'] = +d['Host.no'];
     d['Biovolume'] = +d['Biovolume'];
-    if(!isNaN(d['Biovolume'])) {return d}; // remove all rows where biovolume couldn't be coerced to a number
+    if(!isNaN(d['Biovolume'])) {return d}; // remove all rows where biovolume couldn't be coerced to a number (missing values)
   },
   draw);
   </script>
