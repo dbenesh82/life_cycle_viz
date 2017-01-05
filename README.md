@@ -14,7 +14,7 @@ After adding interactivity, I decided to retain the intial plot as a starting po
 
 ## Feedback
 
-The main feedback that I received at the sketching stage was that there were too many things to distinguish at once (growth, the different life cycle lengths, different transmission types; see X.png). This helped me decide on an interactive scheme. Once I made the plot interactive, I got some more useful feedback from a family member. They said I used too much technical jargon ('what's a definitive host?'). My target audience is other biologists that should understand the jargon, but these data groupings could be explained better. I thus added the feature where, when a button is pressed, a text box is amended to the bottom of the plot that explains the displayed data pattern.
+The main feedback that I received at the sketching stage was that there were too many things to distinguish at once (growth, the different life cycle lengths, different transmission types; see the pngs in 'prelim_plots' folder). This helped me decide on an interactive scheme. Once I made the plot interactive, I got some more useful feedback from a family member. They said I used too much technical jargon ('what's a definitive host?'). My target audience is other biologists that should understand the jargon, but these data groupings could be explained better. I thus added the feature where, when a button is pressed, a text box is amended to the bottom of the plot that explains the displayed data pattern.
 
 ## Resources
 Data source: [Benesh et al. 2016. Ecology. In press](http://onlinelibrary.wiley.com/doi/10.1002/ecy.1680/full)

@@ -17,7 +17,7 @@ function draw(data) {
     var button_container = d3.select(".main_container")
         .append("div")
         .attr('class', 'button_container')
-        .style('width', canvaswidth + "px");
+        .style('width', (canvaswidth-margin.left/2) + "px");
 
     // create buttons for interactivity
     var buttons = button_container.selectAll("button")
@@ -174,7 +174,7 @@ function draw(data) {
         .append('div')
         .attr('class', 'explanation')
         .text("The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. Such parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. This interactive shows how parasitic worms grow as they traverse their life cycles. Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Colors correspond to species with different life cycle lengths.")
-        .style('width', canvaswidth + "px")
+        .style('width', (canvaswidth - margin.left) + "px")
         .style("opacity", 1);
 
 

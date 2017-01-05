@@ -1,4 +1,7 @@
-div.main_container{
+body {
+  background-color: lightgrey;
+}
+div.main_container {
   position: relative;
   left: 50%;
   margin: 10px;
@@ -6,6 +9,7 @@ div.main_container{
   border-width: thin;
   border-color: black;
   border-style: solid;
+  background-color: white;
   }
 h2 {
   color: black;
@@ -39,7 +43,7 @@ button.buttons {
   float: left;
   text-align: center;
   font-size: small;
-  background-color: lightgray;
+  background-color: lightblue;
   border: 1px solid black;
   padding: 3px;
   margin: 5px;
@@ -49,12 +53,13 @@ button.buttons:hover {
   cursor: pointer;
 }
 div.button_container {
-  align: center;
+  margin: auto;
 }
 text.annotation {
   font-size: 22px;
 }
 div.explanation {
+  margin: auto;
   text-align: justify;
-  font-size: 16px;
+  font-size: 18px;
 }
