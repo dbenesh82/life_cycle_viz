@@ -8,6 +8,10 @@ function draw(data) {
         canvaswidth = chartwidth + margin.right + margin.left,
         canvasheight = chartheight + margin.top + margin.bottom;
 
+    // set the width of the text divs above and below plots to be same as plot
+    d3.selectAll('div.text_divs')
+        .style('width', canvaswidth)
+        .style('margin-left', -canvaswidth / 2);
     // set the size of the main container for the interactive plot
     d3.select(".main_container")
         .style('width', canvaswidth)
@@ -84,7 +88,7 @@ function draw(data) {
         .attr('class', 'y title')
         .attr("transform", "translate(" + (margin.left / 3) + "," +
             (margin.top + (chartheight / 2)) + ") rotate(-90)")
-        .text('Biovolume (mm cubed)');
+        .text('Parasite biovolume (mm cubed)');
     d3.selectAll('.tick').select('text') // assign class to ticklabels; can refer to it in CSS
         .attr('class', 'ticklabels');
 
@@ -173,7 +177,7 @@ function draw(data) {
     d3.select('.main_container')
         .append('div')
         .attr('class', 'explanation')
-        .text("The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. Such parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. This interactive shows how parasitic worms grow as they traverse their life cycles. Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Colors correspond to species with different life cycle lengths.")
+        .text("Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Steep lines indicate substantial worm growth at a particular stage in the cycle. Colors correspond to species with different life cycle lengths, that is whether they have one, two, three hosts, etc. in their life cycle.")
         .style('width', (canvaswidth - margin.left) + "px")
         .style("opacity", 1);
 
@@ -278,7 +282,7 @@ function draw(data) {
             update_lines('maxLCL', 1, colscale(1), 0.5);
             update_annotation("Species with one host cycles", colscale(1));
             update_explanation(
-                "Parasite species that infect just one host have simple life cycles. Their lone host is usually a vertebrate in which they grow substantially.");
+              "Parasite species that infect just one host have simple life cycles. Their lone host is usually a vertebrate in which they grow substantially.");
         });
 
     d3.select("button#Two_host_cycles")
@@ -287,7 +291,7 @@ function draw(data) {
             update_lines('maxLCL', 2, colscale(2), 0.3);
             update_annotation("Species with two host cycles", colscale(2));
             update_explanation(
-                "Parasite species that obligatorily infect multiple hosts have complex life cycles. The first host is the intermediate host, and the second host is the definitive host. Reproduction occurs in the definitive host. Parasites with two-host cycles usually grow in both hosts, but particularly the definitive host.");
+              "Parasite species that obligatorily infect multiple hosts have complex life cycles. The first host is the intermediate host, and the second host is the definitive host. Reproduction occurs in the definitive host. Parasites with two-host cycles usually grow in both hosts, but particularly the definitive host.");
         });
 
     d3.select("button#Three_host_cycles")
@@ -296,7 +300,7 @@ function draw(data) {
             update_lines('maxLCL', 3, colscale(3), 0.5);
             update_annotation("Species with three host cycles", colscale(3));
             update_explanation(
-                "Parasite species with three-host life cycles infect two intermediate hosts before reproducing in the third (definitive) host. Growth can occur at any stage, but it is common that little growth occurs in the second intermediate host.");
+              "Parasite species with three-host life cycles infect two intermediate hosts before reproducing in the third (definitive) host. Growth can occur at any stage, but it is common that little growth occurs in the second intermediate host.");
         });
 
 
@@ -348,7 +352,7 @@ function draw(data) {
 
             update_annotation("Species with four or more hosts", colscale(4));
             update_explanation(
-                "Few parasites have cycles longer than three hosts. Growth may or may not occur in the intermediate hosts, and often the intermediate hosts are facultative. The parasite can complete the cycle with or without infecting them.");
+              "Few parasites have cycles longer than three hosts. Growth may or may not occur in the intermediate hosts, and often the intermediate hosts are facultative, which means the parasite can complete the cycle with or without infecting them.");
         });
 
 
@@ -378,7 +382,7 @@ function draw(data) {
             update_lines('Species', randsp, 'red', 1);
             update_annotation(rsannotation, 'red');
             update_explanation(
-                "The database contains 973 parasite species. Body size data was not always available for every life cycle stage.");
+                "The database contains 973 parasite species, and there is a wide diversity of growth patterns. Body sizes were not always available for every life cycle stage.");
         });
 
 
@@ -389,7 +393,7 @@ function draw(data) {
             update_lines('to_int', 'yes', colscale(5), 0.4);
             update_annotation("Growth in intermediate hosts", colscale(5));
             update_explanation(
-                "Parasites use intermediate hosts for growth, development, and transportation between hosts, but not for reproduction. Growth in a first intermediate host is common, whereas growth in latter hosts may or may not occur.");
+                "Parasites use intermediate hosts for growth, development, and transportation between hosts, but not for reproduction. Growth in a first intermediate host is common, whereas growth in latter intermediate hosts may or may not occur.");
         });
     d3.select("button#To_definitive_host")
         .on('click', function() {
@@ -397,7 +401,7 @@ function draw(data) {
             update_lines('to_def', 'yes', colscale(6), 0.3);
             update_annotation("Growth in definitive hosts", colscale(6));
             update_explanation(
-                "Parasites reproduce in their definitive host. In many animals, bigger females make more eggs. Thus, it is not surprising that parasites usually grow significantly in their final host.");
+                "Parasites reproduce in their definitive host. In many animals, bigger females make more eggs. Thus, it is not surprising that parasites usually grow a lot in their final host.");
         });
     d3.select("button#To_facultative_host")
         .on('click', function() {
@@ -405,7 +409,7 @@ function draw(data) {
             update_lines('to_fac', 'yes', colscale(7), 1);
             update_annotation("Growth in facultative hosts", colscale(7));
             update_explanation(
-                "Most parasites have a fixed succession of hosts they must infect to complete the life cycle. But some do not. They have flexible life cycles with some hosts being only facultatively infected. Commonly, facultative hosts are in the middle of a cycle (2nd host) and growth is minimal.");
+                "Most parasites have a fixed succession of hosts they must infect to complete the life cycle. But some do not. They have flexible life cycles in which a given host may or may not be infected during the cycle. Commonly, these facultative hosts are in the middle of a cycle (2nd host) and growth is minimal.");
         });
     d3.select("button#To_humans")
         .on('click', function() {
@@ -442,7 +446,7 @@ function draw(data) {
 
             update_annotation("", 'black');
             update_explanation(
-                "The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing. Long, multi-host life cycles are a paradox. Such parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. Parasites with complex life cycles must also be able to deal with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. This interactive shows how parasitic worms grow as they traverse their life cycles. Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Colors correspond to species with different life cycle lengths.");
+                "Parasites start off as propagules (eggs or free larvae) before infecting one or more hosts in succession. Steep lines indicate substantial worm growth at a particular stage in the cycle. Colors correspond to species with different life cycle lengths, that is whether they have one, two, three hosts, etc. in their life cycle.");
         });
 
 

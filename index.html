@@ -4,35 +4,44 @@
   <meta charset="utf-8">
   <script type="text/javascript" src="js/d3/d3.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/plot_style.css">
-  </head>
+  <title>Interactive life cycle chart</title>
+</head>
 
 
 <body>
-  <h2>Parasite growth across a complex life cycle</h2>
-  <div id="source_ref">More details about the database, as well as the data itself, can be found
-     <a href='http://onlinelibrary.wiley.com/doi/10.1002/ecy.1680/full'
-     target="_blank">here</a>.
-   </div>
-
-   <div class="main_container">
-     <!--this div is populated by the javascript--->
-   </div>
-
   <script type="text/javascript" src="js/draw_plot.js">
   <!--this script element creates the chart--->
   </script>
 
+  <h1>Many ways to grow</h1>
+
+  <div class="text_divs" id="introductory_text">
+    The life cycles of parasitic organisms like tapeworms and roundworms can be convoluted and bizarre. Some worms infect up to five different hosts in succession before reproducing! Long, multi-host life cycles are a paradox. Parasites risk not being transmitted between their obligate hosts and thus dying before reproducing. These parasites must also cope with multiple host physiologies and immune systems. Nonetheless, complex life cycles are the norm among parasitic worms. This interactive explores how parasitic worms grow as they traverse their life cycles. Click the buttons to display different subsets of parasites or types of hosts. Short explanations are below the plot.
+  </div>
+
+   <div class="main_container">
+      <!--this div is populated by the javascript--->
+   </div>
+
+   <div class="text_divs" id="source_ref">
+     More details about the database, as well as the data itself, can be found in <a href='http://onlinelibrary.wiley.com/doi/10.1002/ecy.1680/full'
+     target="_blank">Benesh et al. 2017. Ecology</a>.
+   </div>
+
+   <!--add a few fun pictures here?--->
+
   <script type="text/javascript">
   /*
-    Use D3 to load the data and pass it to draw function
-    */
+  load the data and pass it to draw function in draw_plot.js
+  */
   d3.csv("data/parasite_data.csv", function(d) {
     d['maxLCL'] = +d['maxLCL']; // converts important columns from strings to numbers
     d['Host.no'] = +d['Host.no'];
     d['Biovolume'] = +d['Biovolume'];
     if(!isNaN(d['Biovolume'])) {return d}; // remove all rows where biovolume couldn't be coerced to a number (missing values)
   },
-  draw) // pass the data to the draw function in draw_plot.js;
+  draw);
   </script>
+
 </body>
 </html>
