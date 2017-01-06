@@ -14,7 +14,13 @@ After adding interactivity, I decided to retain the intial plot as a starting po
 
 ## Feedback
 
-The main feedback that I received at the sketching stage was that there were too many things to distinguish at once (growth, the different life cycle lengths, different transmission types; see the pngs in 'prelim_plots' folder). This helped me decide on an interactive scheme. Once I made the plot interactive, I got some more useful feedback from a family member. They said I used too much technical jargon ('what's a definitive host?'). My target audience is other biologists that should understand the jargon, but these data groupings could be explained better. I thus added the feature where, when a button is pressed, a text box is amended to the bottom of the plot that explains the displayed data pattern.
+Here are three pieces of feedback I received while producing this visualization.
+
+1. The main feedback that I received at the sketching stage was that there were too many things to distinguish at once (growth, the different life cycle lengths, different transmission types; see the pngs in 'prelim_plots' folder). This helped me decide on an interactive scheme. 
+
+2. Once I made the plot interactive, I got some more useful feedback from a family member. They said I used too much technical jargon ('what's a definitive host?'). My target audience is other biologists that should understand the jargon, but these data groupings could be explained better in the hope of expanding my audience. I thus added the feature where, when a button is pressed, a text box is amended to the bottom of the plot that explains the displayed data pattern.
+
+3. Finally, a udacity reviewer noted that the explanatory text below the chart is valuable, but it can be overlooked when loading the visualization. Therefore, I added a general explanatory text above the chart that references it. The text below the chart that updates interactively was then revised to be a bit more specific to each scenario.
 
 ## Resources
 Data source: [Benesh et al. 2016. Ecology. In press](http://onlinelibrary.wiley.com/doi/10.1002/ecy.1680/full)
